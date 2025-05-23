@@ -1,7 +1,64 @@
+import Image from "next/image";
+import Link from "next/link";
+
 export default function Home() {
   return (
     <main>
-      <div>Hello world!</div>
+      <section className="mx-auto">
+        <div className="from-primary/30 relative flex h-58 items-center justify-center bg-gradient-to-b to-zinc-950 lg:h-96">
+          <div className="absolute mx-auto flex w-full flex-col items-center justify-center p-4 text-center">
+            <h1 className="mb-4 flex items-center gap-4 text-4xl font-bold lg:text-6xl">
+              <Image
+                src={"/logo-c.png"}
+                height={48}
+                width={48}
+                alt="Logo Linguagem C"
+              />{" "}
+              Linguagem C
+            </h1>
+            <h2 className="max-w-4xl text-base lg:text-2xl">
+              Conjunto de materias de introdução a Linguagem C. <br />
+              Projeto criado para disciplina de Prática de Inovação 5.
+            </h2>
+          </div>
+        </div>
+      </section>
+      <section className="bg-gradient-to-b from-zinc-950 to-zinc-900 py-6 lg:py-24">
+        <div className="mx-auto flex w-full max-w-screen-2xl flex-col px-4 py-8">
+          <div className="mb-8 flex flex-col">
+            <span className="text-2xl font-bold">Módulos</span>
+            <span>
+              Os materiais são separados por módulos, no qual é apresentado por
+              um grupo de alunos diferente.
+            </span>
+          </div>
+          <div className="grid grid-cols-[repeat(auto-fit,minmax(20rem,1fr))] justify-center gap-4">
+            <VideoCard />
+            <VideoCard />
+            <VideoCard />
+            <VideoCard />
+          </div>
+        </div>
+      </section>
     </main>
+  );
+}
+
+function VideoCard() {
+  return (
+    <Link
+      href="/material"
+      className="group bg-primary/20 relative aspect-square cursor-pointer overflow-hidden rounded-xl border border-zinc-700 transition-all hover:border-zinc-500"
+    >
+      <div className="absolute bottom-0 flex w-full flex-col bg-zinc-950 p-4 transition-all group-hover:rounded-lg group-hover:pb-8">
+        <span className="mb-2 font-bold text-white">Título vídeo</span>
+        <span className="text-white">
+          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Suscipit ea
+          sint reprehenderit molestias numquam optio similique nihil nam
+          praesentium vel ad earum repellendus, libero, nemo provident, dolores
+          officia. Repellendus, animi!
+        </span>
+      </div>
+    </Link>
   );
 }
