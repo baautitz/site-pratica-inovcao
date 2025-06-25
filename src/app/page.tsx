@@ -1,7 +1,8 @@
 import Image from "next/image";
 import Link from "next/link";
+import grupos from "../../grupos";
 
-export default function Home() {
+export default async function Home() {
   return (
     <main>
       <section className="mx-auto">
@@ -33,10 +34,14 @@ export default function Home() {
             </span>
           </div>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(20rem,1fr))] justify-center gap-4">
-            <VideoCard />
-            <VideoCard />
-            <VideoCard />
-            <VideoCard />
+            {grupos.map((grupo) => (
+              <VideoCard
+                key={grupo.slug}
+                slug={grupo.slug}
+                titulo={grupo.titulo}
+                descricao={grupo.resumo}
+              />
+            ))}
           </div>
         </div>
       </section>
@@ -44,20 +49,23 @@ export default function Home() {
   );
 }
 
-function VideoCard() {
+function VideoCard({
+  slug,
+  titulo,
+  descricao,
+}: {
+  slug: string;
+  titulo: string;
+  descricao: string;
+}) {
   return (
     <Link
-      href="/material"
+      href={`/${slug}`}
       className="group bg-primary/20 relative aspect-square cursor-pointer overflow-hidden rounded-xl border border-zinc-700 transition-all hover:border-zinc-500"
     >
       <div className="absolute bottom-0 flex w-full flex-col bg-zinc-950 p-4 transition-all group-hover:rounded-lg group-hover:pb-8">
-        <span className="mb-2 font-bold text-white">Título vídeo</span>
-        <span className="text-white">
-          Lorem ipsum dolor sit amet consectetur, adipisicing elit. Suscipit ea
-          sint reprehenderit molestias numquam optio similique nihil nam
-          praesentium vel ad earum repellendus, libero, nemo provident, dolores
-          officia. Repellendus, animi!
-        </span>
+        <span className="mb-2 font-bold text-white">{titulo}</span>
+        <span className="h-[4lh] text-white">{descricao}</span>
       </div>
     </Link>
   );

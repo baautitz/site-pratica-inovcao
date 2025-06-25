@@ -8,7 +8,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = new URL(
   import.meta.url,
 ).toString();
 
-export default function PDFViewer() {
+export default function PDFViewer({ src }: { src: string }) {
   const [numPages, setNumPages] = useState<number | null>(null);
 
   function onDocumentLoadSuccess({ numPages }: { numPages: number }) {
@@ -17,7 +17,7 @@ export default function PDFViewer() {
 
   return (
     <Document
-      file="teste.pdf"
+      file={src}
       onLoadSuccess={onDocumentLoadSuccess}
       loading={null}
       className="mx-auto h-full w-fit [&_canvas]:!size-full [&_canvas]:!object-scale-down [&>div]:h-full"

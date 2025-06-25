@@ -1,23 +1,22 @@
-"use client";
+"use server";
 
 import { Button } from "@/components/ui/button";
 import { ArrowLeft, Download } from "lucide-react";
-import dynamic from "next/dynamic";
 import Link from "next/link";
+import VideoPlayer from "./_components/video-player";
+import grupos from "../../../grupos";
+import { notFound } from "next/navigation";
+import PDFViewer from "./_components/pdf-viewer";
 
-const PDFViewer = dynamic(() => import("./_components/pdf-viewer"), {
-  ssr: false,
-});
+export default async function MaterialPage({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+  const data = grupos.find((grupo) => grupo.slug === slug);
 
-export default function MaterialPage() {
-  const livro = {
-    titulo: "Título do Livro Exemplo",
-    autor: "Autor Exemplar",
-    ano: 2023,
-    arquivo: "/teste.pdf",
-  };
-
-  const alunos = ["Fulano", "Ciclano", "Beltrano"];
+  if (!data) notFound();
 
   return (
     <main className="bg-gradient-to-b from-zinc-950 to-zinc-900">
@@ -32,19 +31,15 @@ export default function MaterialPage() {
 
       <section className="mx-auto mb-12 flex w-full max-w-screen-2xl flex-col px-4 text-center">
         <h1 className="mb-4 gap-4 text-4xl font-bold lg:text-6xl">
-          Título do material
+          {data.titulo}
         </h1>
-        <h2 className="text-base lg:text-2xl">Pequena descrição</h2>
+        <h2 className="text-base lg:text-2xl">{data.descricao}</h2>
       </section>
 
       <section className="mx-auto mb-6 flex w-full max-w-screen-2xl flex-col px-4">
         <div className="mb-8 aspect-video w-full overflow-hidden rounded-xl border border-zinc-700 bg-zinc-900">
-          <iframe
-            src="https://www.youtube.com/embed/9Rwd5TaZW7U?si=DgdtcSjKYL76AdZ1"
-            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-            referrerPolicy="strict-origin-when-cross-origin"
-            className="size-full"
-            allowFullScreen
+          <VideoPlayer
+            src={`https://assets.vnici.us/${slug}/videos/output.m3u8`}
           />
         </div>
       </section>
@@ -57,7 +52,7 @@ export default function MaterialPage() {
           </div>
 
           <div className="mb-6 aspect-[9/16] w-full overflow-x-auto rounded-xl border border-zinc-700 bg-zinc-900 lg:aspect-[16/10]">
-            <PDFViewer />
+            <PDFViewer src={`https://assets.vnici.us/${slug}/material.pdf`} />
           </div>
 
           <div className="grid grid-cols-1 gap-6 lg:grid-cols-2">
@@ -66,21 +61,29 @@ export default function MaterialPage() {
                 Alunos participantes do grupo:
               </h3>
               <div className="flex flex-col gap-0 text-zinc-300">
-                {alunos.map((aluno) => (
-                  <span key={aluno}>{aluno}</span>
-                ))}
+                {[...data.alunos]
+                  .sort((a, b) =>
+                    a.localeCompare(b, "pt", { sensitivity: "base" }),
+                  )
+                  .map((aluno) => (
+                    <span key={aluno}>{aluno}</span>
+                  ))}
               </div>
             </div>
             <div className="flex flex-col gap-4 rounded-lg border border-zinc-700 bg-zinc-800 p-6 text-white shadow-lg lg:flex-row lg:items-center lg:justify-between">
               <div>
-                <h4 className="text-lg font-bold">{livro.titulo}</h4>
+                <h4 className="text-lg font-bold">{data.livro.titulo}</h4>
                 <p className="text-zinc-300">
-                  Autor: {livro.autor} <br />
-                  Ano de lançamento: {livro.ano}
+                  Autor: {data.livro.autor} <br />
+                  Ano de lançamento: {data.livro.ano}
                 </p>
               </div>
               <Button asChild size="lg" className="w-fit">
-                <Link href={livro.arquivo} target="_blank" download>
+                <Link
+                  href={`https://assets.vnici.us/${slug}/livro.pdf`}
+                  target="_blank"
+                  download={`${data.livro.titulo}.pdf`}
+                >
                   <Download /> Baixar livro
                 </Link>
               </Button>
