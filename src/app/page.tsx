@@ -2,6 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 import grupos from "../../grupos";
 
+export const metadata = {
+  title: "Linguagem C - Prática de Inovação 5",
+};
+
 export default async function Home() {
   return (
     <main>

@@ -8,14 +8,33 @@ import grupos from "../../../grupos";
 import { notFound } from "next/navigation";
 import PDFViewer from "./_components/pdf-viewer";
 
+function getGrupoBySlug(slug: string) {
+  return grupos.find((grupo) => grupo.slug === slug);
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ slug: string }>;
+}) {
+  const { slug } = await params;
+
+  const grupo = getGrupoBySlug(slug);
+  if (!grupo) return notFound();
+
+  return {
+    title: grupo.titulo,
+  };
+}
+
 export default async function MaterialPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const data = grupos.find((grupo) => grupo.slug === slug);
 
+  const data = getGrupoBySlug(slug);
   if (!data) notFound();
 
   return (
