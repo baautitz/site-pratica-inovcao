@@ -38,12 +38,13 @@ export default async function Home() {
             </span>
           </div>
           <div className="grid grid-cols-[repeat(auto-fit,minmax(20rem,1fr))] justify-center gap-4">
-            {grupos.map((grupo) => (
+            {grupos.map((grupo, idx) => (
               <VideoCard
                 key={grupo.slug}
                 slug={grupo.slug}
                 titulo={grupo.titulo}
                 descricao={grupo.resumo}
+                number={idx + 1}
               />
             ))}
           </div>
@@ -57,17 +58,28 @@ function VideoCard({
   slug,
   titulo,
   descricao,
+  number,
 }: {
   slug: string;
   titulo: string;
   descricao: string;
+  number: number;
 }) {
   return (
     <Link
       href={`/${slug}`}
-      className="group bg-primary/20 relative aspect-square cursor-pointer overflow-hidden rounded-xl border border-zinc-700 transition-all hover:border-zinc-500"
+      className="group grid aspect-square cursor-pointer grid-rows-[1fr_max-content] overflow-hidden rounded-xl border border-zinc-700 transition-all hover:border-zinc-500"
     >
-      <div className="absolute bottom-0 flex w-full flex-col bg-zinc-950 p-4 transition-all group-hover:rounded-lg group-hover:pb-8">
+      <div className="bg-primary/20 relative block">
+        <Image
+          src={`/thumbnails/${number}.png`}
+          alt={titulo}
+          className="object-cover"
+          fill
+          unoptimized
+        />
+      </div>
+      <div className="bottom-0 flex w-full flex-col bg-zinc-950 p-4 transition-all group-hover:rounded-lg group-hover:pb-8">
         <span className="mb-2 font-bold text-white">{titulo}</span>
         <span className="h-[4lh] text-white">{descricao}</span>
       </div>
